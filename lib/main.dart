@@ -15,7 +15,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const LogoApp(), // Pass control to LogoApp, which will create the animation
+      // home: const FadeInDemo()
+      // home: const LogoApp(), // Pass control to LogoApp, which will create the animation
+      home: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [LogoApp(), ImplicitLogoApp()],
+      ),
     );
   }
 }
@@ -50,7 +55,8 @@ class _LogoAppState extends State<LogoApp> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedLogo(animation: animation); // Pass the animation to AnimatedLogo
+    return AnimatedLogo(
+        animation: animation); // Pass the animation to AnimatedLogo
   }
 }
 
@@ -67,6 +73,40 @@ class AnimatedLogo extends AnimatedWidget {
         height: animation.value,
         width: animation.value,
         child: const FlutterLogo(),
+      ),
+    );
+  }
+}
+
+class ImplicitLogoApp extends StatefulWidget {
+  const ImplicitLogoApp({super.key});
+
+  @override
+  State<ImplicitLogoApp> createState() => _ImplicitLogoState();
+}
+
+class _ImplicitLogoState extends State<ImplicitLogoApp> {
+  double opacity = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      setState(() {
+        opacity = 1;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedOpacity(
+      opacity: opacity,
+      duration: Duration(seconds: 3),
+      child: Image.network(
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/4/46/PrimeMinisterNawazSharif.jpg/475px-PrimeMinisterNawazSharif.jpg",
+        width: 500,
+        height: 500,
       ),
     );
   }
